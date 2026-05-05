@@ -8,6 +8,18 @@
 #define MAX_WORDS 2000  //最大单词数
 #define MAX_WORD_LEN 64  //最大单词长度
 
+is_matching_pair(char left, char right)  {
+    return (left == '(' && right == ')') //
+        || (left == '(' && right == ')') //
+        || (left == '{' && right == '}') //
+
+}
+
+
+check_brackets(const char* text) {
+
+}
+
 typedef struct {
     char word[MAX_WORD_LEN];  //单词
     int count;                //出现次数
@@ -26,37 +38,42 @@ int main(void) {
     SetConsoleOutputCP(65001);
 
     char filename[512];
+ FILE *file = NULL;
+    while (1) {
     printf("请输入文件名: ");
-    if (scanf("%511s", filename) != 1) {
+    if (scanf(fgets(filename, sizeof(filename), stdin) == NULL) {
         printf("读取文件名失败。\n");
         return 1;
     }
+     size_t len = strlen(filename);
+        if (len > 0 && filename[len - 1] == '\n') {
+            filename[len - 1] = '\0';
+        }
+        if (filename[0] == '\0') {
+            printf("文件名不能为空。\n");
+            continue;
+        }
 
-    FILE *file = fopen(filename, "r");
+    file = fopen(filename, "r");
     if (!file) {
-        printf("打开文件失败！\n");
-        return 1;
+       break;
     }
+     printf("无法打开文件:%s\n请检查路径后重新输入.\n",filename);
 
     static char lines[MAX_LINES][MAX_LINE_LEN];
     int lineCount = 0;
-    while (lineCount < MAX_LINES && fgets(lines[lineCount], MAX_LINE_LEN, file) != NULL) {
-        lineCount++;
-    }
-    fclose(file);
 
     WordItem wordCount[MAX_WORDS];
     int wordCountSize = 0;
 
-    file = fopen(filename, "r");
-    if (!file) {
-        printf("打开文件失败！\n");
-        return 1;
-    }
     char word[MAX_WORD_LEN];
     int wi = 0;
     int c;
-    while ((c = fgetc(file)) != EOF) {
+
+     while (lineCount < MAX_LINES && fgets(lines[lineCount], MAX_LINE_LEN, file) != NULL) {
+        char *p = lines[lineCount];
+        while (*p) {
+            c = (unsigned char)*p;
         if (isalpha(c)) {
             if (wi < MAX_WORD_LEN - 1) {
                 word[wi++] = (char)tolower(c);
@@ -75,6 +92,7 @@ int main(void) {
                 wi = 0;
             }
         }
+         p++;
     }
     if (wi > 0) {
         word[wi] = '\0';
@@ -86,6 +104,9 @@ int main(void) {
             wordCount[wordCountSize].count = 1;
             wordCountSize++;
         }
+         wi = 0;
+        }
+        lineCount++;
     }
     fclose(file);
 
@@ -97,7 +118,12 @@ int main(void) {
         printf("0. 退出\n");
         printf("请选择: ");
         if (scanf("%d", &choice) != 1) {
-            break;
+            int ch;
+            while ((ch = getchar()) != '\n' && ch != EOF) {
+            }
+            printf("输入无效，请输入数字。\n");
+            choice = -1;
+            continue;
         }
 
         if (choice == 1) {
