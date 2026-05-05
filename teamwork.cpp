@@ -8,62 +8,83 @@
 #define MAX_WORDS 2000  //最大单词数
 #define MAX_WORD_LEN 64  //最大单词长度
 
-typedef struct {
-    char word[MAX_WORD_LEN];  //单词
-    int count;                //出现次数
-} WordItem;
 
-int find_word(WordItem wordCount[], int size, const char* word) {
-    for (int i = 0; i < size; i++) {
-        if (strcmp(wordCount[i].word, word) == 0) {
-            return i;  //找到单词，返回索引
-        }
-    }
-    return -1;  //未找到单词
+is_matching_pair(char left, char right)  {
+    return (left == '(' && right == ')') //
+        || (left == '(' && right == ')') //
+        || (left == '{' && right == '}') //
+
 }
 
-int main(void) {
+
+check_brackets(const char* text) {
+
+typedef struct {
+    char 单词[MAX_WORD_LEN];  //单词
+    整数 计数;                //出现次数
+} 单词项;
+
+整数 查找单词(单词项 wordCount[], 整数 size, const char* word) {
+    for (整数 i = 0; i < size; i++) {
+        如果 strcmp
+            返回 i;  //找到单词，返回索引
+        }
+    }
+    返回 -1;  //未找到单词
+}
+
+int 主函数(void) {
     SetConsoleOutputCP(65001);
 
     char filename[512];
+ 文件*文件 = 空;
+    while (1) {
     printf("请输入文件名: ");
-    if (scanf("%511s", filename) != 1) {
+    if (fgets(文件名，文件名大小), 标准输入 == 空) {
         printf("读取文件名失败。\n");
-        return 1;
+        返回 1;
+    }
+     size_t len = strlen(filename);
+        if (len > 0 && filename[len - 1] == '\n') {
+            filename[len - 1] = '\0';
+        }
+        如果 [] == '\0') {
+            printf("文件名不能为空。\n");
+            继续;
+        }
+
+file = fopen(文件名,"r");
+        if (file) {
+            break;
+        }
+        printf("无法打开文件：%s\n请检查路径后重新输入。\n", filename);
     }
 
-    FILE *file = fopen(filename, "r");
-    if (!file) {
-        printf("打开文件失败！\n");
-        return 1;
-    }
 
-    static char lines[MAX_LINES][MAX_LINE_LEN];
+     char lines[MAX_LINES][MAX_LINE_LEN];
     int lineCount = 0;
-    while (lineCount < MAX_LINES && fgets(lines[lineCount], MAX_LINE_LEN, file) != NULL) {
-        lineCount++;
-    }
+    
     fclose(file);
 
-    WordItem wordCount[MAX_WORDS];
+    单词项单词计数[MAX_WORDS];
     int wordCountSize = 0;
 
-    file = fopen(filename, "r");
-    if (!file) {
+文件 =fopen(文件名,"r");
+    if (!文件) {
         printf("打开文件失败！\n");
-        return 1;
-    }
-    char word[MAX_WORD_LEN];
+        返回 
+}
+    char单词[MAX_WORD_LEN];
     int wi = 0;
-    int c;
+    整数c;
     while ((c = fgetc(file)) != EOF) {
         if (isalpha(c)) {
-            if (wi < MAX_WORD_LEN - 1) {
-                word[wi++] = (char)tolower(c);
+            wi < 最大单词长度 -
+单词[wi++] = ()tolowerc);
             }
-        } else {
-            if (wi > 0) {
-                word[wi] = '\0';
+        } 否则 {
+            如果 (
+单词[wi] = '\0';
                 int idx = find_word(wordCount, wordCountSize, word);
                 if (idx >= 0) {
                     wordCount[idx].count++;
@@ -76,8 +97,8 @@ int main(void) {
             }
         }
     }
-    if (wi > 0) {
-        word[wi] = '\0';
+    如果 (wi > 0) {
+单词[wi] = '\0';
         int idx = find_word(wordCount, wordCountSize, word);
         if (idx >= 0) {
             wordCount[idx].count++;
@@ -100,7 +121,7 @@ int main(void) {
             break;
         }
 
-        if (choice == 1) {
+        如果 (选择 ==1) {
             printf("\n--- 原文 ---\n");
             for (int i = 0; i < lineCount; i++) {
                 printf("%s", lines[i]);
@@ -108,7 +129,7 @@ int main(void) {
         } else if (choice == 2) {
             printf("\n--- 单词统计 ---\n");
             for (int i = 0; i < wordCountSize; i++) {
-                printf("%s : %d\n", wordCount[i].word, wordCount[i].count);
+printf("%s : %d\n", wordCount[i].单词计数);
             }
         } else if (choice != 0) {
             printf("无效选择，请重试。\n");
